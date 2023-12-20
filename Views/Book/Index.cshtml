@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BookStore.Models.Book>
+
+@{
+    ViewData["Title"] = "Book";
+}
+
+<div class="row pt-4">
+    <div class="col-6">
+        <h2 class="text-primary">Книги</h2>
+    </div>
+    <div class="col-6 text-end">
+        <a asp-controller="Book" asp-action="Create" class="btn btn-primary">Додання нової книги</a>
+    </div>
+</div>
+<br>
+<br>
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th width="100">Назва книги</th>
+            <th width="100">Опис книги</th>
+            <th width="100">Ціна</th>
+            <th width="100">Дії</th>
+        </tr>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.Title</td>
+                <td>@obj.Description</td>
+                <td>@obj.Price</td>
+                <td>
+                    <a asp-controller="Book" asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary mx-2">Редагувати</a>
+                    <a asp-controller="Book" asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger mx-2">Видалити</a>
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>Книг немає!</p>
+}

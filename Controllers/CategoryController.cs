@@ -15,5 +15,25 @@ namespace BookStore.Controllers
             IEnumerable<Category>? objList = _db?.Category;
             return View(objList);
         }
+
+        // GET
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Category obj)
+        {
+            if (ModelState.IsValid)
+            {
+                _db?.Category.Add(obj);
+                _db?.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+        }
     }
 }
