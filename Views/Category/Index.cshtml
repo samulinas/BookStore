@@ -8,7 +8,7 @@
         <h2 class="text-primary">Категорії</h2>
     </div>
     <div class="col-6 text-end">
-        <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Додання нової категорії</a>
+        <a asp-controller="Category" asp-action="Create" class="btn btn-primary"><i class="fa-regular fa-plus"></i> &nbsp; Додання нової категорії</a>
     </div>
 </div>
 <br><br>
@@ -26,8 +26,8 @@
                 <td>@obj.Name</td>
                 <td>@obj.DisplayOrder</td>
                 <td>
-                    <a asp-controller="Category" asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary mx-2">Редагувати</a>
-                    <a asp-controller="Category" asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger mx-2">Видалити</a>
+                    <a asp-controller="Category" asp-route-Id="@obj.Id" asp-action="Edit" class="btn btn-primary m-1"><i class="fa-regular fa-pen-to-square"></i> Редагувати</a>
+                    <a asp-controller="Category" asp-route-Id="@obj.Id" asp-action="Delete" class="btn btn-danger m-1"><i class="fa-regular fa-trash-can"></i> Видалити</a>
                 </td>
             </tr>
         }
