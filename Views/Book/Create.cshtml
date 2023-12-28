@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Create";
 }
 
-<form method="post" asp-action="Create">
+<form method="post" asp-action="Create" enctype="multipart/form-data">
 	<div class="border p-3">
 		<div class="form-group row">
 			<h1 class="text-info pl-3">Додання книги</h1>
@@ -17,8 +17,7 @@
 						<label asp-for="Image"></label>
 					</div>
 					<div class="col-8">
-						<input asp-for="Image" class="form-control">
-						<span asp-validation-for="Image" class="text-danger"></span>
+						<input type="file" name="files" asp-for="Image" id="uploadBox" multiple class="form-control">
 					</div>
 				</div>
 				<br>
@@ -47,7 +46,7 @@
 						<label asp-for="Description"></label>
 					</div>
 					<div class="col-8">
-						<input asp-for="Description" class="form-control">
+						<textarea asp-for="Description" class="form-control summernote"></textarea>
 						<span asp-validation-for="Description" class="text-danger"></span>
 					</div>
 				</div>
@@ -67,7 +66,9 @@
 						<label asp-for="CategoryId"></label>
 					</div>
 					<div class="col-8">
-						<input asp-for="CategoryId" class="form-control">
+						<select asp-for="CategoryId" asp-items="@ViewBag.CategoryDropDown" class="form-control">
+							<option disabled selected>--Оберіть категорію--</option>
+						</select>
 						<span asp-validation-for="CategoryId" class="text-danger"></span>
 					</div>
 				</div>
@@ -75,7 +76,7 @@
 				<div class="form-group row">
 					<div class="col-8 offset-4 row">
 						<div class="col">
-							<input type="submit" class="btn btn-info w-100" value="Додати">
+							<input onclick="return validateInput()" type="submit" class="btn btn-info w-100" value="Додати">
 						</div>
 						<div class="col">
 							<a asp-action="Index" class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i> Назад</a>
@@ -91,9 +92,25 @@
 </form>
 
 @section Scripts{
-
 	@{
 		<partial name="_ValidationScriptsPartial" />
 	}
-
+	<script>
+		$(document).ready(function () {
+			$('.summernote').summernote({
+				height: 150
+			});
+		});
+		function validateInput() {
+			if (document.getElementById("uploadBox").value == "") {
+				Swal.fire(
+					'Помилка!',
+					'Будь ласка завантажте картинку!',
+					'error'
+				)
+				return false;
+			}
+			return true;
+		}
+	</script>
 }

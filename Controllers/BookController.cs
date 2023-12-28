@@ -1,24 +1,34 @@
 ﻿using BookStore.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookStore.Controllers
 {
     public class BookController : Controller
     {
-        private readonly AppDbContext? _db;
+        private readonly AppDbContext _db;
         public BookController(AppDbContext db)
         {
             _db = db;
         }
         public IActionResult Index()
         {
-            IEnumerable<Book>? objList = _db?.Book;
-            return View(objList);
+            IEnumerable<Book> objList = _db.Book;
+			foreach (var obj in objList) {
+				obj.Category = _db.Category.FirstOrDefault(u => u.Id == obj.CategoryId);
+			}
+			return View(objList);
         }
 
 		// GET CREATE
 		public IActionResult Create()
 		{
+			IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+			{
+			    Text = i.Name,
+			    Value = i.Id.ToString()
+			});
+			ViewBag.CategoryDropDown = CategoryDropDown;
 			return View();
 		}
 
@@ -29,8 +39,8 @@ namespace BookStore.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_db?.Book.Add(obj);
-				_db?.SaveChanges();
+				_db.Book.Add(obj);
+				_db.SaveChanges();
 				return RedirectToAction("Index");
 			}
 			return View(obj);
@@ -39,11 +49,17 @@ namespace BookStore.Controllers
 		// GET EDIT
 		public IActionResult Edit(int? id)
 		{
+			IEnumerable<SelectListItem> CategoryDropDown = _db.Category.Select(i => new SelectListItem
+			{
+				Text = i.Name,
+				Value = i.Id.ToString()
+			});
+			ViewBag.CategoryDropDown = CategoryDropDown;
 			if (id == null || id == 0)
 			{
 				return NotFound();
 			}
-			var obj = _db?.Book.Find(id);
+			var obj = _db.Book.Find(id);
 			if (obj == null)
 			{
 				return NotFound();
@@ -58,8 +74,8 @@ namespace BookStore.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_db?.Book.Update(obj);
-				_db?.SaveChanges();
+				_db.Book.Update(obj);
+				_db.SaveChanges();
 				return RedirectToAction("Index");
 			}
 			return View(obj);
@@ -72,7 +88,7 @@ namespace BookStore.Controllers
 			{
 				return NotFound();
 			}
-			var obj = _db?.Book.Find(id);
+			var obj = _db.Book.Find(id);
 			if (obj == null)
 			{
 				return NotFound();
@@ -85,13 +101,13 @@ namespace BookStore.Controllers
 		[ValidateAntiForgeryToken]
 		public IActionResult DeletePost(int? id)
 		{
-			var obj = _db?.Book.Find(id);
+			var obj = _db.Book.Find(id);
 			if (obj == null)
 			{
 				return NotFound();
 			}
-			_db?.Book.Remove(obj);
-			_db?.SaveChanges();
+			_db.Book.Remove(obj);
+			_db.SaveChanges();
 			return RedirectToAction("Index");
 		}
 	}

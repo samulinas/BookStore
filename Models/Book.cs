@@ -29,6 +29,7 @@ namespace BookStore.Models
 		[Range(1000, 9999, ErrorMessage = "Рік має бути у діапазоні 1000-9999")]
 		public int Year { get; set; }
 
+		[Required(ErrorMessage = "Вибір категорії обов'язковий.")]
 		[DisplayName("Категорія")]
 		public int CategoryId { get; set; }
 
